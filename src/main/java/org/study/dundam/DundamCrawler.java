@@ -23,9 +23,12 @@ public class DundamCrawler {
         log.info("크롤링 시작: {}", adventureGroupName);
 
         page.navigate(url);
+        log.info("page 이동: {}", url);
+
         page.waitForSelector(".sr-result .scon");
         List<ElementHandle> charactersContainer = page.querySelectorAll(".sr-result .scon");
 
+        log.info("fetch size {}", charactersContainer.size());
         return charactersContainer.stream()
                 .map(this::exctractCharacterSpec)
                 .collect(Collectors.toList());
