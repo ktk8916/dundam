@@ -33,7 +33,7 @@ jobs:
         username: ${{secrets.HOST_USERNAME}}
         key: ${{secrets.HOST_KEY}}
         script: |
-          docker pull ${{secrets.DOCKER_USERNAME}}/${{secrets.DOCKER_REPOSITORY}}
-          docker compose pull
-          docker compose down
-          docker compose up -d
+          sudo docker pull ${{secrets.DOCKER_USERNAME}}/${{secrets.DOCKER_REPOSITORY}}
+          sudo docker stop ${{secrets.DOCKER_REPOSITORY}}
+          sudo docker rm ${{secrets.DOCKER_REPOSITORY}}
+          sudo docker run --name ${{secrets.DOCKER_REPOSITORY}} -d -p 8080:8080 ${{secrets.DOCKER_USERNAME}}/${{secrets.DOCKER_REPOSITORY}} 
