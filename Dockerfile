@@ -3,12 +3,9 @@ WORKDIR /app
 COPY . .
 RUN gradle clean build -x test
 
-FROM openjdk:21-jdk-slim
-
-COPY --from=builder /app/build/libs/*T.jar app.jar
-RUN apt-get update && apt-get install -y wget curl \
-    && java -cp app.jar com.microsoft.playwright.CLI install chromium \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+FROM mcr.microsoft.com/playwright/java:v1.48.0-jammy
+WORKDIR /app
+COPY --from=builder /app/build/libs/*.jar app.jar
 
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
