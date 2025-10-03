@@ -23,6 +23,7 @@ public class DundamCrawler {
         log.info("크롤링 시작: {}", adventureGroupName);
 
         page.navigate(url);
+        page.waitForSelector(".sr-result .scon");
         List<ElementHandle> charactersContainer = page.querySelectorAll(".sr-result .scon");
 
         return charactersContainer.stream()
