@@ -4,7 +4,7 @@ FROM openjdk:21-jdk-slim
 WORKDIR /app
 
 # 빌드 파일 복사
-COPY build/libs/*.jar app.jar
+COPY ./build/libs/*.jar app.jar
 
 # 포트 노출
 EXPOSE 8080
