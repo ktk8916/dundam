@@ -30,7 +30,8 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
 
     // crawler
-    implementation 'com.microsoft.playwright:playwright:1.40.0'
+    implementation 'org.seleniumhq.selenium:selenium-java:4.14.0'
+    implementation 'io.github.bonigarcia:webdrivermanager:5.5.0'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'

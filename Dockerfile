@@ -3,8 +3,9 @@ WORKDIR /app
 COPY . .
 RUN gradle clean build -x test
 
-FROM mcr.microsoft.com/playwright/java:v1.47.0-jammy
+FROM openjdk:21-jdk-slim
 WORKDIR /app
+
 COPY --from=builder /app/build/libs/*T.jar app.jar
 
 EXPOSE 8080
