@@ -32,7 +32,7 @@ public class DundamCrawler {
             webDriver.get(url);
             log.info("페이지 요청 완료");
 
-            WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(60));
+            WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(30));
             wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".sr-result .scon")));
 
             log.info("캐릭터 로딩 완료");
