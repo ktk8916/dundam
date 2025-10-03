@@ -33,7 +33,7 @@ jobs:
         username: ${{secrets.HOST_USERNAME}}
         key: ${{secrets.HOST_KEY}}
         script: |
-          cd /path/to/your/project
+          docker pull ${{secrets.DOCKER_USERNAME}}/${{secrets.DOCKER_REPOSITORY}}
           docker-compose pull
           docker-compose down
           docker-compose up -d
