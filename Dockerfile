@@ -4,9 +4,11 @@ COPY . .
 RUN gradle clean build -x test
 
 FROM openjdk:21-jdk-slim
-ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
-    
+
 COPY --from=builder /app/build/libs/*T.jar app.jar
+RUN apt-get update && apt-get install -y wget curl \
+    && java -cp app.jar com.microsoft.playwright.CLI install chromium \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
