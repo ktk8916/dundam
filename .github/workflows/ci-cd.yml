@@ -27,7 +27,7 @@ jobs:
       run: ./gradlew clean build
 
     - name: Build Docker image
-      run: docker build -t ${{secrets.DOCKER_USERNAME}}/dundam-pick .
+      run: docker build -t ${{secrets.DOCKER_USERNAME}}/${{secrets.DOCKER_REPOSITORY}} .
 
     - name: Docker Login
       uses: docker/login-action@v3.0.0
@@ -36,7 +36,7 @@ jobs:
         password: ${{secrets.DOCKER_PASSWORD}}
         
     - name: Docker push
-      run: docker push ${{secrets.DOCKER_USERNAME}}/dundam-pick
+      run: docker push ${{secrets.DOCKER_USERNAME}}/${{secrets.DOCKER_REPOSITORY}}
 
     - name: Deploy to server
       uses: appleboy/ssh-action@v1.0.0
