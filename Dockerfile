@@ -3,7 +3,7 @@ WORKDIR /app
 COPY . .
 RUN gradle clean build -x test
 
-FROM eclipse-temurin:21-jdk-jammy
+FROM mcr.microsoft.com/playwright/java:v1.55.0
     
 COPY --from=builder /app/build/libs/*T.jar app.jar
 RUN java -cp app.jar com.microsoft.playwright.CLI install-deps chromium
