@@ -20,13 +20,32 @@ public class SeleniumConfig {
     @Value("${SELENIUM_URL:http://localhost:4444/wd/hub}")
     private String seleniumUrl;
 
+
     @Bean
     public WebDriver driver() throws MalformedURLException {
         ChromeOptions options = new ChromeOptions();
+
         options.addArguments("--headless=new");
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-dev-shm-usage");
 
-        return new RemoteWebDriver(new URL(seleniumUrl), options);
+        options.addArguments("--disable-blink-features=AutomationControlled");
+        options.addArguments("--disable-dev-shm-usage");
+        options.addArguments("--disable-gpu");
+        options.addArguments("--window-size=1920,1080");
+        options.addArguments("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
+
+        // WebDriver 탐지 방지
+        options.setExperimentalOption("excludeSwitches",
+                new String[]{"enable-automation"});
+        options.setExperimentalOption("useAutomationExtension", false);
+
+        RemoteWebDriver driver = new RemoteWebDriver(new URL(seleniumUrl), options);
+
+        driver.executeScript(
+                "Object.defineProperty(navigator, 'webdriver', {get: () => undefined})"
+        );
+
+        return driver;
     }
 }
