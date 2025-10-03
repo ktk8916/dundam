@@ -1,0 +1,6 @@
+services:
+  dundam-app:
+    build: .
+    ports:
+      - "8080:8080"
+    shm_size: 2gb

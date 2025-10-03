@@ -1,0 +1,17 @@
+build/
+.gradle/
+gradle/
+gradlew
+gradlew.bat
+.git/
+.gitignore
+*.md
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.DS_Store
+src/test/
+logs/
+*.log
