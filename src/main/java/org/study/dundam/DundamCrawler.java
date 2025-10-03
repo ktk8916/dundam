@@ -23,8 +23,9 @@ public class DundamCrawler {
     private final SeleniumManager seleniumManager;
 
     public List<CharacterSpec> crawlCharacterSpecs(String adventureGroupName) {
+        WebDriver webDriver = null;
         try {
-            WebDriver webDriver = seleniumManager.getDriver();
+            webDriver = seleniumManager.getDriver();
 
             String url = String.format(DUNAM_URL, adventureGroupName);
             log.info("크롤링 시작: {}", adventureGroupName);
@@ -38,7 +39,6 @@ public class DundamCrawler {
             log.info("캐릭터 로딩 완료");
             List<WebElement> charactersContainer = webDriver.findElements(By.cssSelector(".sr-result .scon"));
 
-            webDriver.close();
             return charactersContainer.stream()
                     .map(this::extractCharacterSpec)
                     .collect(Collectors.toList());
@@ -46,7 +46,9 @@ public class DundamCrawler {
         } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
-
+            if(webDriver != null) {
+                webDriver.quit();
+            }
         }
     }
 
