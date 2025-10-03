@@ -27,10 +27,12 @@ public class DundamCrawler {
         log.info("크롤링 시작: {}", adventureGroupName);
 
         webDriver.get(url);
+        log.info("페이지 요청 완료");
 
-        WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(10));
+        WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(60));
         wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".sr-result .scon")));
-        
+
+        log.info("캐릭터 로딩 완료");
         List<WebElement> charactersContainer = webDriver.findElements(By.cssSelector(".sr-result .scon"));
 
         return charactersContainer.stream()
