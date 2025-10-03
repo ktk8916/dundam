@@ -39,7 +39,7 @@ public class PlaywrightConfig {
     @Bean
     public Page page(BrowserContext context) {
         Page page = context.newPage();
-        page.setDefaultTimeout(60000);  // 60초로 증가
+        page.setDefaultTimeout(60000);
         page.setDefaultNavigationTimeout(60000);
         return page;
     }

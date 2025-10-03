@@ -3,9 +3,9 @@ WORKDIR /app
 COPY . .
 RUN gradle clean build -x test
 
-FROM mcr.microsoft.com/playwright/java:v1.48.0-jammy
+FROM mcr.microsoft.com/playwright/java:v1.47.0-jammy
 WORKDIR /app
-COPY --from=builder /app/build/libs/*.jar app.jar
+COPY --from=builder /app/build/libs/*T.jar app.jar
 
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
