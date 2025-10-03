@@ -34,6 +34,6 @@ jobs:
         key: ${{secrets.HOST_KEY}}
         script: |
           docker pull ${{secrets.DOCKER_USERNAME}}/${{secrets.DOCKER_REPOSITORY}}
-          docker-compose pull
-          docker-compose down
-          docker-compose up -d
+          docker compose pull
+          docker compose down
+          docker compose up -d
