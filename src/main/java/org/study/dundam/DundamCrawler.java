@@ -5,8 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
@@ -18,26 +18,33 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DundamCrawler {
 
-    private final WebDriver webDriver;
-
     private final static String DUNAM_URL = "https://dundam.xyz/search?server=adven&name=%s";
 
+    private final SeleniumManager seleniumManager;
+
     public List<CharacterSpec> crawlCharacterSpecs(String adventureGroupName) {
-        String url = String.format(DUNAM_URL, adventureGroupName);
-        log.info("크롤링 시작: {}", adventureGroupName);
+        try {
+            WebDriver webDriver = seleniumManager.getDriver();
 
-        webDriver.get(url);
-        log.info("페이지 요청 완료");
+            String url = String.format(DUNAM_URL, adventureGroupName);
+            log.info("크롤링 시작: {}", adventureGroupName);
 
-        WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(60));
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".sr-result .scon")));
+            webDriver.get(url);
+            log.info("페이지 요청 완료");
 
-        log.info("캐릭터 로딩 완료");
-        List<WebElement> charactersContainer = webDriver.findElements(By.cssSelector(".sr-result .scon"));
+            WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(60));
+            wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".sr-result .scon")));
 
-        return charactersContainer.stream()
-                .map(this::extractCharacterSpec)
-                .collect(Collectors.toList());
+            log.info("캐릭터 로딩 완료");
+            List<WebElement> charactersContainer = webDriver.findElements(By.cssSelector(".sr-result .scon"));
+
+            return charactersContainer.stream()
+                    .map(this::extractCharacterSpec)
+                    .collect(Collectors.toList());
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private CharacterSpec extractCharacterSpec(WebElement character) {
