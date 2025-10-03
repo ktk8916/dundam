@@ -29,8 +29,7 @@ RUN apt-get update && apt-get install -y \
     libx11-6 \
     libxcb1 \
     libexpat1 \
-    fonts-liberation \
-    && rm -rf /var/lib/apt/lists/*
+    fonts-liberation
     
 COPY --from=builder /app/build/libs/*T.jar app.jar
 EXPOSE 8080
