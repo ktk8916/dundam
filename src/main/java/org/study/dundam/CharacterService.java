@@ -23,7 +23,11 @@ public class CharacterService {
             return result;
         } catch (Exception e) {
             log.warn("모험단 '{}' 크롤링 실패, 가장 최근 저장된 데이터로 fallback: {}", adventureGroupName, e.getMessage());
-            return repository.findByAdventureGroupName(adventureGroupName);
+            List<CharacterSpec> characterSpecs = repository.findByAdventureGroupName(adventureGroupName);
+            if (characterSpecs.isEmpty()) {
+                throw new RuntimeException("찐빠");
+            }
+            return characterSpecs;
         }
     }
 }

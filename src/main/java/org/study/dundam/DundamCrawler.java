@@ -38,12 +38,15 @@ public class DundamCrawler {
             log.info("캐릭터 로딩 완료");
             List<WebElement> charactersContainer = webDriver.findElements(By.cssSelector(".sr-result .scon"));
 
+            webDriver.close();
             return charactersContainer.stream()
                     .map(this::extractCharacterSpec)
                     .collect(Collectors.toList());
 
         } catch (Exception e) {
             throw new RuntimeException(e);
+        } finally {
+
         }
     }
 
@@ -51,7 +54,14 @@ public class DundamCrawler {
         WebElement characterNameElement = character.findElement(By.cssSelector(".seh_name .name"));
         String characterNameWithServer = characterNameElement.getText();
         String serverText = characterNameElement.findElement(By.cssSelector(".introd.server")).getText();
-        String characterName = characterNameWithServer.replace(serverText, "").trim();
+
+        String characterName;
+        int lastIndex = characterNameWithServer.lastIndexOf(serverText);
+        if (lastIndex >= 0) {
+            characterName = characterNameWithServer.substring(0, lastIndex).trim();
+        } else {
+            characterName = characterNameWithServer;
+        }
 
         String fame = character.findElement(By.cssSelector(".seh_name .level .val")).getText();
         String jobName = character.findElement(By.cssSelector(".seh_job .sev")).getText();
