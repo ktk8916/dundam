@@ -10,28 +10,34 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
+      - name: Build Docker image
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }} .
 
-    - name: Build Docker image
-      run: docker build -t ${{secrets.DOCKER_USERNAME}}/${{secrets.DOCKER_REPOSITORY}} .
+  push:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Docker Login
+        uses: docker/login-action@v3.0.0
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Docker Login
-      uses: docker/login-action@v3.0.0
-      with:
-        username: ${{secrets.DOCKER_USERNAME}}
-        password: ${{secrets.DOCKER_PASSWORD}}
+      - name: Docker push
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}
 
-    - name: Docker push
-      run: docker push ${{secrets.DOCKER_USERNAME}}/${{secrets.DOCKER_REPOSITORY}}
-
-    - name: Deploy to server
-      uses: appleboy/ssh-action@v1.0.0
-      with:
-        host: ${{secrets.HOST_IP}}
-        username: ${{secrets.HOST_USERNAME}}
-        key: ${{secrets.HOST_KEY}}
-        script: |
-          docker compose pull
-          docker compose up -d --remove-orphans
+  deploy:
+    runs-on: ubuntu-latest
+    needs: push
+    steps:
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.HOST_IP }}
+          username: ${{ secrets.HOST_USERNAME }}
+          key: ${{ secrets.HOST_KEY }}
+          script: |
+            docker-compose pull
+            docker-compose up -d --remove-orphans
